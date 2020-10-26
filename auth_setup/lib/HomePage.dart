@@ -1,28 +1,17 @@
-import 'package:auth_setup/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter demo app',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
 }
 
-class MyHomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
+  String mytext = null;
+  final DocumentReference documentReference =
+      FirebaseFirestore.instance.doc('myapp/dummy');
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
@@ -42,6 +31,22 @@ class MyHomePage extends StatelessWidget {
     googleSignIn.signOut();
     print('user signed out');
   }
+
+  void _add() {
+    Map<String, String> data = <String, String>{
+      'name': 'Prakash',
+      'desc': 'Flutter developer'
+    };
+    documentReference.set(data).whenComplete(() {
+      print('Data added');
+    }).catchError((e) => print(e));
+  }
+
+  void _update() {}
+
+  void _delete() {}
+
+  void _fetch() {}
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +74,32 @@ class MyHomePage extends StatelessWidget {
               child: Text('Sign Out'),
               color: Colors.red,
             ),
+            RaisedButton(
+              onPressed: _add,
+              child: Text('Add'),
+              color: Colors.cyan,
+            ),
+            RaisedButton(
+              onPressed: _update,
+              child: Text('Update'),
+              color: Colors.lightBlue,
+            ),
+            RaisedButton(
+              onPressed: _delete,
+              child: Text('Delete'),
+              color: Colors.orange,
+            ),
+            RaisedButton(
+              onPressed: _fetch,
+              child: Text('Fetch'),
+              color: Colors.lime,
+            ),
+            mytext == null
+                ? Container()
+                : Text(
+                    mytext,
+                    style: TextStyle(fontSize: 20),
+                  )
           ],
         ),
       ),
