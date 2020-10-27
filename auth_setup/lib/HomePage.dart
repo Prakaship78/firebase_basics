@@ -42,11 +42,31 @@ class _HomePageState extends State<HomePage> {
     }).catchError((e) => print(e));
   }
 
-  void _update() {}
+  void _update() {
+    Map<String, String> data = <String, String>{
+      'name': 'Prakash updated',
+      'desc': 'Flutter developer updated'
+    };
+    documentReference.update(data).whenComplete(() {
+      print('Data updated');
+    }).catchError((e) => print(e));
+  }
 
-  void _delete() {}
+  void _delete() {
+    documentReference.delete().whenComplete(() {
+      print('Document deleted');
+    }).catchError((e) => print(e));
+  }
 
-  void _fetch() {}
+  void _fetch() {
+    documentReference.get().then((datasnapshot) {
+      if (datasnapshot.exists) {
+        setState(() {
+          mytext = datasnapshot.data()['desc'];
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
