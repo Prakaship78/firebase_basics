@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,6 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  StreamSubscription<DocumentSnapshot> subscription;
   String mytext = null;
   final DocumentReference documentReference =
       FirebaseFirestore.instance.doc('myapp/dummy');
@@ -66,6 +69,24 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    subscription = documentReference.snapshots().listen((datasnapshot) {
+      if (datasnapshot.exists) {
+        setState(() {
+          mytext = datasnapshot.data()['desc'];
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subscription?.cancel();
   }
 
   @override
