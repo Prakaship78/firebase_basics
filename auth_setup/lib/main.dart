@@ -1,4 +1,5 @@
 import 'package:auth_setup/HomePage.dart';
+import 'package:auth_setup/walpaper_app/wall_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter demo app',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: WallScreen(),
     );
   }
 }
