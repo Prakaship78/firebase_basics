@@ -1,3 +1,4 @@
+import 'package:auth_setup/walpaper_app/fullscreen_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -48,13 +49,21 @@ class _WallScreenState extends State<WallScreen> {
                     elevation: 15,
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FullScreenImagePage(imgPath)));
+                      },
                       child: Hero(
-                          tag: imgPath,
-                          child: FadeInImage(
-                            image: NetworkImage(imgPath),
-                            fit: BoxFit.cover,
-                            placeholder: AssetImage('assets/logo.png'),
-                          )),
+                        tag: Text(imgPath),
+                        child: FadeInImage(
+                          image: NetworkImage(imgPath),
+                          fit: BoxFit.cover,
+                          placeholder: AssetImage('assets/logo.png'),
+                        ),
+                      ),
                     ),
                   );
                 },
