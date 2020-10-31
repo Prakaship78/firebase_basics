@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // ignore: must_be_immutable
@@ -23,40 +24,25 @@ class _FullScreen extends State<FullScreen> {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight);
 
-  // Future<void> downloadFile() async {
-  //   downloading = true;
-  //   var status = await Permission.storage.status;
-  //   if (!status.isGranted) {
-  //     await Permission.storage.request();
-  //   }
-  //   Dio dio = Dio();
-  //   // var dir = await getApplicationDocumentsDirectory();
-  //   // use external download dir to save photos
-  //   var dir = await ExtStorage.getExternalStoragePublicDirectory(
-  //       ExtStorage.DIRECTORY_DOWNLOADS);
-  //   var imageName = widget.imgPath.split('/').last;
-  //   imageName = imageName.split('?').first;
-  //   print(imageName);
-  //   try {
-  //     await dio.download(
-  //       widget.imgPath,
-  //       '$dir/$imageName',
-  //       onReceiveProgress: (rec, total) {
-  //         // print('Receive: $rec , Total: $total');
-  //         setState(() {
-  //           progressString = ((rec / total) * 100).toStringAsFixed(0) + '%';
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   setState(() {
-  //     downloading = false;
-  //     progressString = "Completed";
-  //   });
-  //   print('Download Complete');
-  // }
+  Future<void> downloadFile() async {
+    final status = await Permission.storage.request();
+    var dir = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+    print('dir:$dir');
+    var imageName = widget.imgPath.split('/').last;
+    imageName = imageName.split('?').first;
+    print('imagename: $imageName');
+    if (status.isGranted) {
+      final id = await FlutterDownloader.enqueue(
+          url: widget.imgPath,
+          savedDir: dir,
+          fileName: '$imageName',
+          showNotification: true,
+          openFileFromNotification: true);
+    } else {
+      print('Permission denied');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +88,7 @@ class _FullScreen extends State<FullScreen> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        // downloadFile();
+                        downloadFile();
                       },
                       child: Text(
                         'download',
