@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // ignore: must_be_immutable
-class FullScreenImagePage extends StatefulWidget {
+class FullScreen extends StatefulWidget {
   String imgPath;
-  FullScreenImagePage(this.imgPath);
+  FullScreen(this.imgPath);
 
   @override
-  _FullScreenImagePageState createState() => _FullScreenImagePageState();
+  _FullScreen createState() => _FullScreen();
 }
 
-class _FullScreenImagePageState extends State<FullScreenImagePage> {
+class _FullScreen extends State<FullScreen> {
   bool downloading = false;
 
   var progressString = " ";
@@ -23,40 +23,40 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight);
 
-  Future<void> downloadFile() async {
-    downloading = true;
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      await Permission.storage.request();
-    }
-    Dio dio = Dio();
-    // var dir = await getApplicationDocumentsDirectory();
-    // use external download dir to save photos
-    var dir = await ExtStorage.getExternalStoragePublicDirectory(
-        ExtStorage.DIRECTORY_DOWNLOADS);
-    var imageName = widget.imgPath.split('/').last;
-    imageName = imageName.split('?').first;
-    print(imageName);
-    try {
-      await dio.download(
-        widget.imgPath,
-        '$dir/$imageName',
-        onReceiveProgress: (rec, total) {
-          // print('Receive: $rec , Total: $total');
-          setState(() {
-            progressString = ((rec / total) * 100).toStringAsFixed(0) + '%';
-          });
-        },
-      );
-    } catch (e) {
-      print(e);
-    }
-    setState(() {
-      downloading = false;
-      progressString = "Completed";
-    });
-    print('Download Complete');
-  }
+  // Future<void> downloadFile() async {
+  //   downloading = true;
+  //   var status = await Permission.storage.status;
+  //   if (!status.isGranted) {
+  //     await Permission.storage.request();
+  //   }
+  //   Dio dio = Dio();
+  //   // var dir = await getApplicationDocumentsDirectory();
+  //   // use external download dir to save photos
+  //   var dir = await ExtStorage.getExternalStoragePublicDirectory(
+  //       ExtStorage.DIRECTORY_DOWNLOADS);
+  //   var imageName = widget.imgPath.split('/').last;
+  //   imageName = imageName.split('?').first;
+  //   print(imageName);
+  //   try {
+  //     await dio.download(
+  //       widget.imgPath,
+  //       '$dir/$imageName',
+  //       onReceiveProgress: (rec, total) {
+  //         // print('Receive: $rec , Total: $total');
+  //         setState(() {
+  //           progressString = ((rec / total) * 100).toStringAsFixed(0) + '%';
+  //         });
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   setState(() {
+  //     downloading = false;
+  //     progressString = "Completed";
+  //   });
+  //   print('Download Complete');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +102,7 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                   children: [
                     RaisedButton(
                       onPressed: () {
-                        downloadFile();
+                        // downloadFile();
                       },
                       child: Text(
                         'download',
@@ -126,29 +126,6 @@ class _FullScreenImagePageState extends State<FullScreenImagePage> {
                   ],
                 ),
               ),
-              downloading
-                  ? Center(
-                      child: Container(
-                        height: 120,
-                        width: 250,
-                        child: Card(
-                          color: Colors.black,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(),
-                              SizedBox(height: 20),
-                              Text(
-                                'Downloading File: $progressString',
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  : Padding(padding: EdgeInsets.all(8))
             ],
           ),
         ),

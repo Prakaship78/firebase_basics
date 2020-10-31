@@ -1,4 +1,4 @@
-import 'package:auth_setup/walpaper_app/fullscreen_image.dart';
+import 'package:auth_setup/walpaper_app/full_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -53,8 +53,7 @@ class _WallScreenState extends State<WallScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    FullScreenImagePage(imgPath)));
+                                builder: (context) => FullScreen(imgPath)));
                       },
                       child: Hero(
                         tag: Text(imgPath),
