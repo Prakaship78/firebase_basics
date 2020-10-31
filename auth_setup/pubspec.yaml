@@ -33,6 +33,13 @@ dependencies:
   firebase_core:
   cloud_firestore:
   flutter_staggered_grid_view:
+  image_picker_saver:
+  http:
+  esys_flutter_share:
+  dio:
+  path_provider:
+  ext_storage:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:
